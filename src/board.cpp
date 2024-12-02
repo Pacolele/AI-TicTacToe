@@ -1,6 +1,5 @@
 
 #include "board.h"
-#include <string>
 
 void Board::printBoard() {
   cout << "*-----*-----*-----*" << endl;

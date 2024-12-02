@@ -17,6 +17,7 @@ public:
   ~Board() {};
   void printBoard();
   bool makeMove(int row, int col, char player);
+  bool computerMove(int row, int col);
   int movesMade = 0;
   int boardSize;
 
