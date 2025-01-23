@@ -1,5 +1,7 @@
 
 #include "board.h"
+#include <utility>
+#include <vector>
 
 void Board::printBoard() {
   cout << "*-----*-----*-----*" << endl;
@@ -34,10 +36,42 @@ bool Board::makeMove(int row, int col, char player) {
     diagCount[1] += increment;
   }
 
-  if (abs(rowCount[row]) == boardSize || abs(colCount[col]) == boardSize ||
-      abs(diagCount[0]) == boardSize || abs(diagCount[1]) == boardSize) {
+  if (game(*this, player)) {
     return true;
   }
 
   return false;
 }
+
+bool Board::game(Board board, char player) {
+  int target = (player == 'X') ? board.boardSize : -board.boardSize;
+
+  for (int i = 0; i < board.boardSize; ++i) {
+    if (rowCount[i] == target || colCount[i] == target) {
+      return true;
+    }
+  }
+
+  if (diagCount[0] == target || diagCount[1] == target) {
+    return true;
+  }
+
+  return false;
+}
+
+vector<pair<int, int>> Board::getAvailableMoves() {
+  vector<pair<int, int>> movesAvailable;
+  for (int i = 0; i < this->boardSize; i++) {
+    if (this->board[i][i] == ' ') {
+      movesAvailable.push_back(make_pair(i, i));
+    }
+  }
+  return movesAvailable;
+}
+
+vector<vector<char>> Board::getBoard() { return this->board; }
+char Board::getCurrPlayer() { return this->currPlayer; }
+bool Board::getGameOver() { return this->gameOver; }
+
+void Board::setCurrPlayer(char player) { this->currPlayer = player; }
+void Board::setGameOver(bool state) { this->gameOver = state; }

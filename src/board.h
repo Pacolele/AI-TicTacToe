@@ -2,6 +2,7 @@
 #define BOARD_H
 
 #include "string"
+#include <cstdlib>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -13,19 +14,33 @@ public:
     rowCount = vector<int>(boardSize, 0);
     colCount = vector<int>(boardSize, 0);
     diagCount = vector<int>(2, 0);
+    currPlayer = (rand() % 2 == 0) ? 'X' : '=';
+    gameOver = false;
   };
   ~Board() {};
   void printBoard();
   bool makeMove(int row, int col, char player);
+  bool game(Board board, char player);
   bool computerMove(int row, int col);
+  vector<pair<int, int>> getAvailableMoves();
+
   int movesMade = 0;
   int boardSize;
+  /* Getters */
+  vector<vector<char>> getBoard();
+  char getCurrPlayer();
+  bool getGameOver();
+
+  /* Setters */
+  void setCurrPlayer(char player);
+  void setGameOver(bool state);
 
 private:
   vector<vector<char>> board;
   vector<int> rowCount;
   vector<int> colCount;
   vector<int> diagCount;
-  // string board[boardSize][boardSize];
+  char currPlayer;
+  bool gameOver;
 };
 #endif
