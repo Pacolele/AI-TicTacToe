@@ -61,12 +61,18 @@ bool Board::game(Board board, char player) {
 
 vector<pair<int, int>> Board::getAvailableMoves() {
   vector<pair<int, int>> movesAvailable;
-  for (int i = 0; i < this->boardSize; i++) {
-    if (this->board[i][i] == ' ') {
-      movesAvailable.push_back(make_pair(i, i));
+  for (int c = 0; c < this->boardSize; c++) {
+    for (int r = 0; r < this->boardSize; r++) {
+      if (this->board[r][c] == ' ') {
+        movesAvailable.push_back(make_pair(r, c));
+      }
     }
   }
   return movesAvailable;
+}
+
+Board Board::getBoardState(pair<int, int> cords) {
+  return board[cords.first][cords.second] = currPlayer;
 }
 
 vector<vector<char>> Board::getBoard() { return this->board; }

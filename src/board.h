@@ -23,7 +23,7 @@ public:
   bool game(Board board, char player);
   bool computerMove(int row, int col);
   vector<pair<int, int>> getAvailableMoves();
-
+  Board getBoardState(pair<int, int> cords);
   int movesMade = 0;
   int boardSize;
   /* Getters */

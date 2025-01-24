@@ -13,8 +13,8 @@ class AI {
   AI() {}
   ~AI() {}
 
-  int bestMove(vector<vector<char>> board, char player);
   int score(Board board);
   int minmax(Board board);
+  pair<int, int> choice;
 };
 #endif
