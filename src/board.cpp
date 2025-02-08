@@ -18,21 +18,21 @@ void Board::printBoard() {
   cout << "*-----*-----*-----*" << endl;
 }
 
-bool Board::makeMove(int row, int col, char player) {
-  if (board[row][col] != ' ') {
+bool Board::makeMove(pair<int, int> move, char player) {
+  if (board[move.first][move.second] != ' ') {
     cout << "Spot already taken choose another" << endl;
     return false;
   }
 
-  board[row][col] = player;
+  board[move.first][move.second] = player;
   int increment = (player == 'X') ? 1 : -1;
 
-  rowCount[row] += increment;
-  colCount[col] += increment;
+  rowCount[move.first] += increment;
+  colCount[move.second] += increment;
 
-  if (row == col) {
+  if (move.first == move.second) {
     diagCount[0] += increment;
-  } else if (row == boardSize - col - 1) {
+  } else if (move.first == boardSize - move.second - 1) {
     diagCount[1] += increment;
   }
 
@@ -61,8 +61,8 @@ bool Board::game(Board board, char player) {
 
 vector<pair<int, int>> Board::getAvailableMoves() {
   vector<pair<int, int>> movesAvailable;
-  for (int c = 0; c < this->boardSize; c++) {
-    for (int r = 0; r < this->boardSize; r++) {
+  for (int r = 0; r < this->boardSize; r++) {
+    for (int c = 0; c < this->boardSize; c++) {
       if (this->board[r][c] == ' ') {
         movesAvailable.push_back(make_pair(r, c));
       }
@@ -72,12 +72,23 @@ vector<pair<int, int>> Board::getAvailableMoves() {
 }
 
 Board Board::getBoardState(pair<int, int> cords) {
-  return board[cords.first][cords.second] = currPlayer;
+  Board newBoard(*this);
+  newBoard.board[cords.first][cords.second] = currPlayer;
+  int increment = (currPlayer == 'X') ? 1 : -1;
+  newBoard.rowCount[cords.first] += increment;
+  newBoard.colCount[cords.second] += increment;
+  if (cords.first == cords.second) {
+    newBoard.diagCount[0] += increment;
+  }
+  if (cords.first == boardSize - cords.second - 1) {
+    newBoard.diagCount[1] += increment;
+  }
+  newBoard.currPlayer = (currPlayer == 'X') ? 'O' : 'X';
+  return newBoard;
 }
 
-vector<vector<char>> Board::getBoard() { return this->board; }
+Board Board::getBoard() { return *this; }
 char Board::getCurrPlayer() { return this->currPlayer; }
 bool Board::getGameOver() { return this->gameOver; }
-
 void Board::setCurrPlayer(char player) { this->currPlayer = player; }
 void Board::setGameOver(bool state) { this->gameOver = state; }

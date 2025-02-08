@@ -17,28 +17,33 @@ int AI::minmax(Board board) {
   if (board.getGameOver())
     return score(board);
 
+  vector<pair<int, int>> movesAvailable = board.getAvailableMoves();
+  if (movesAvailable.empty()) {
+    return score(board);
+  }
+
   vector<pair<int, int>> moves;
   vector<int> score;
-  vector<pair<int, int>> movesAvailable = board.getAvailableMoves();
 
   for (auto move : movesAvailable) {
     Board possibleBoard = board.getBoardState(move);
-    score.push_back(minmax(possibleBoard));
+    int currentScore = minmax(possibleBoard);
+    score.push_back(currentScore);
     moves.push_back(move);
   }
 
   if (board.getCurrPlayer() == 'X') {
-    int max_score_index =
-        max_element(score.begin(), score.end()) - score.begin();
-
-    choice = moves[max_score_index];
-    return score[max_score_index];
+    // Maximizing player: choose the move with the maximum score.
+    auto max_it = max_element(score.begin(), score.end());
+    int max_index = distance(score.begin(), max_it);
+    choice = moves[max_index];
+    return score[max_index];
   } else {
-    int min_score_index =
-        min_element(score.begin(), score.end()) - score.begin();
-
-    choice = moves[min_score_index];
-    return score[min_score_index];
+    // Minimizing player: choose the move with the minimum score.
+    auto min_it = min_element(score.begin(), score.end());
+    int min_index = distance(score.begin(), min_it);
+    choice = moves[min_index];
+    return score[min_index];
   }
   return score[0];
 }

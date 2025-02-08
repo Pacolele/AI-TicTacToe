@@ -10,9 +10,9 @@
 using namespace std;
 /****************/
 class AI {
+public:
   AI() {}
   ~AI() {}
-
   int score(Board board);
   int minmax(Board board);
   pair<int, int> choice;

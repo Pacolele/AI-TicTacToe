@@ -19,15 +19,14 @@ public:
   };
   ~Board() {};
   void printBoard();
-  bool makeMove(int row, int col, char player);
+  bool makeMove(pair<int, int> move, char player);
   bool game(Board board, char player);
-  bool computerMove(int row, int col);
   vector<pair<int, int>> getAvailableMoves();
   Board getBoardState(pair<int, int> cords);
   int movesMade = 0;
   int boardSize;
   /* Getters */
-  vector<vector<char>> getBoard();
+  Board getBoard();
   char getCurrPlayer();
   bool getGameOver();
 
