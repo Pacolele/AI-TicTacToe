@@ -8,10 +8,11 @@ int main() {
   // Bot setup
   AI ai;
   // Setup random for gamestart
-  random_device rd;
-  mt19937 gen(rd());
-  uniform_int_distribution<> dist(0, 1);
-  bool humanStarts = (dist(gen) == 0);
+  // random_device rd;
+  // mt19937 gen(rd());
+  // uniform_int_distribution<> dist(0, 1);
+  // bool humanStarts = (dist(gen) == 0);
+  bool humanStarts = true;
   char human = 'X', bot = 'O';
   board.setHumanChar(human);
   board.setBotChar(bot);
