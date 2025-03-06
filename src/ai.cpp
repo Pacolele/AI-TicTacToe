@@ -1,10 +1,14 @@
 #include "ai.h"
 #include "board.h"
 #include <algorithm>
+#include <iterator>
+#include <numeric>
 
 /* Player is the player currently taking a turn */
 int AI::score(Board board) {
-  char opponent = (board.getCurrPlayer() == 'X') ? 'O' : 'X';
+  // cout << "Current player in score function: " << board.getCurrPlayer() <<
+  // endl;
+  char opponent = (board.getCurrPlayer() == 'O') ? 'X' : 'O';
   if (board.game(board, board.getCurrPlayer())) {
     return 10;
   } else if (board.game(board, opponent)) {
@@ -13,7 +17,7 @@ int AI::score(Board board) {
     return 0;
 }
 
-int AI::minmax(Board board) {
+int AI::minmax(Board board, bool isRoot = false) {
   if (board.getGameOver())
     return score(board);
 
@@ -21,29 +25,52 @@ int AI::minmax(Board board) {
   if (movesAvailable.empty()) {
     return score(board);
   }
+  // cout << "Length of moves available: " << movesAvailable.size() << endl;
+  if (isRoot) {
+    vector<pair<int, int>> moves;
+    vector<int> total;
+    for (auto move : movesAvailable) {
+      Board possibleBoard = board.getBoardState(move);
+      cout << "Possible board: " << endl;
+      possibleBoard.printBoard();
+      if (possibleBoard.game(possibleBoard, board.getBotChar())) {
+        cout << "HEEEELLOOO ITS OVER: " << endl;
+        choice = move;
+        return score(possibleBoard);
+      }
+      int totalSum = minmax(possibleBoard);
+      total.push_back(totalSum);
+      moves.push_back(move);
+    }
+    int bestIndex = 0;
+    cout << board.getCurrPlayer() << endl;
 
-  vector<pair<int, int>> moves;
-  vector<int> score;
+    if (board.getCurrPlayer() == 'O') {
+      cout << "Getting highest amount" << endl;
+      bestIndex =
+          distance(total.begin(), max_element(total.begin(), total.end()));
 
+    } else {
+      bestIndex =
+          distance(total.begin(), min_element(total.begin(), total.end()));
+    }
+    cout << bestIndex << endl;
+    choice = moves[bestIndex];
+    for (auto s : total) {
+      cout << s << endl;
+    }
+    for (auto move : moves) {
+      cout << move.first << ":" << move.second << endl;
+    }
+    return total[bestIndex];
+  }
+
+  int branchSum = 0;
   for (auto move : movesAvailable) {
-    Board possibleBoard = board.getBoardState(move);
-    int currentScore = minmax(possibleBoard);
-    score.push_back(currentScore);
-    moves.push_back(move);
+    Board newBoard = board.getBoardState(move);
+    branchSum += minmax(newBoard);
   }
+  iterations += 1;
 
-  if (board.getCurrPlayer() == 'X') {
-    // Maximizing player: choose the move with the maximum score.
-    auto max_it = max_element(score.begin(), score.end());
-    int max_index = distance(score.begin(), max_it);
-    choice = moves[max_index];
-    return score[max_index];
-  } else {
-    // Minimizing player: choose the move with the minimum score.
-    auto min_it = min_element(score.begin(), score.end());
-    int min_index = distance(score.begin(), min_it);
-    choice = moves[min_index];
-    return score[min_index];
-  }
-  return score[0];
+  return branchSum;
 }

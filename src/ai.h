@@ -14,7 +14,8 @@ public:
   AI() {}
   ~AI() {}
   int score(Board board);
-  int minmax(Board board);
+  int minmax(Board board, bool isRoot);
   pair<int, int> choice;
+  int iterations;
 };
 #endif

@@ -19,6 +19,7 @@ public:
   };
   ~Board() {};
   void printBoard();
+  bool spotEmpty(pair<int, int> move);
   bool makeMove(pair<int, int> move, char player);
   bool game(Board board, char player);
   vector<pair<int, int>> getAvailableMoves();
@@ -29,10 +30,13 @@ public:
   Board getBoard();
   char getCurrPlayer();
   bool getGameOver();
-
+  char getHumanChar();
+  char getBotChar();
   /* Setters */
   void setCurrPlayer(char player);
   void setGameOver(bool state);
+  void setHumanChar(char c);
+  void setBotChar(char c);
 
 private:
   vector<vector<char>> board;
@@ -41,5 +45,7 @@ private:
   vector<int> diagCount;
   char currPlayer;
   bool gameOver;
+  char human;
+  char bot;
 };
 #endif

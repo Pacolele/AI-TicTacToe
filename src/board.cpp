@@ -32,6 +32,9 @@ bool Board::makeMove(pair<int, int> move, char player) {
 
   if (move.first == move.second) {
     diagCount[0] += increment;
+    if (move.first == 1 && move.second == 1) { // We are in the middle position
+      diagCount[1] += increment;
+    }
   } else if (move.first == boardSize - move.second - 1) {
     diagCount[1] += increment;
   }
@@ -40,6 +43,14 @@ bool Board::makeMove(pair<int, int> move, char player) {
     return true;
   }
 
+  return false;
+}
+
+bool Board::spotEmpty(pair<int, int> move) {
+  if (board[move.first][move.second] == ' ') {
+    cout << "Spot empty" << endl;
+    return true;
+  }
   return false;
 }
 
@@ -79,6 +90,10 @@ Board Board::getBoardState(pair<int, int> cords) {
   newBoard.colCount[cords.second] += increment;
   if (cords.first == cords.second) {
     newBoard.diagCount[0] += increment;
+    if (cords.first == 1 &&
+        cords.second == 1) { // We are in the middle position
+      newBoard.diagCount[1] += increment;
+    }
   }
   if (cords.first == boardSize - cords.second - 1) {
     newBoard.diagCount[1] += increment;
@@ -90,5 +105,9 @@ Board Board::getBoardState(pair<int, int> cords) {
 Board Board::getBoard() { return *this; }
 char Board::getCurrPlayer() { return this->currPlayer; }
 bool Board::getGameOver() { return this->gameOver; }
+char Board::getHumanChar() { return this->human; }
+char Board::getBotChar() { return this->bot; }
 void Board::setCurrPlayer(char player) { this->currPlayer = player; }
 void Board::setGameOver(bool state) { this->gameOver = state; }
+void Board::setHumanChar(char c) { this->human = c; }
+void Board::setBotChar(char c) { this->bot = c; }
